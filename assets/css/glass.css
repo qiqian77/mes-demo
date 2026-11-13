@@ -1,0 +1,168 @@
+/*
+ * 毛玻璃与层次主题层
+ * 在 app.css 之后加载，只负责材质与光影，不改动布局与数据样式。
+ *
+ * 取舍：玻璃只用在「框架与浮层」（顶栏、侧栏、KPI、抽屉、提示条）。
+ * 表格、图表、表单区域保持接近不透明的白底，保证数字与曲线始终清晰可读。
+ * 背景铺三块极淡的柔光，让 backdrop-filter 有内容可模糊；不用渐变网格、噪点或发光装饰。
+ */
+
+:root {
+  --glass: rgba(255, 255, 255, .52);
+  --glass-soft: rgba(255, 255, 255, .72);
+  --glass-strong: rgba(255, 255, 255, .82);
+  --glass-edge: rgba(255, 255, 255, .78);
+  --glass-hair: rgba(207, 216, 204, .68);
+  --glass-shadow: 0 10px 30px rgba(28, 36, 29, .045);
+}
+
+/* ---------- 环境光：固定不动，滚动时从玻璃后面透出 ---------- */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient__blob {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+}
+.ambient__blob--a {
+  width: 780px; height: 780px; top: -300px; left: -220px;
+  background: radial-gradient(circle, rgba(46, 107, 96, .30) 0%, rgba(46, 107, 96, .10) 44%, rgba(46, 107, 96, 0) 72%);
+}
+.ambient__blob--b {
+  width: 700px; height: 700px; top: 6%; right: -260px;
+  background: radial-gradient(circle, rgba(171, 118, 36, .22) 0%, rgba(171, 118, 36, .07) 46%, rgba(171, 118, 36, 0) 74%);
+}
+.ambient__blob--c {
+  width: 900px; height: 620px; bottom: -320px; left: 18%;
+  background: radial-gradient(circle, rgba(88, 124, 150, .18) 0%, rgba(88, 124, 150, .055) 48%, rgba(88, 124, 150, 0) 76%);
+}
+.shell { position: relative; z-index: 1; }
+
+/* ---------- 框架：顶栏与侧栏 ---------- */
+.topbar {
+  background: linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, 0)), rgba(255, 255, 255, .52);
+  border-bottom: 1px solid var(--glass-hair);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72), 0 8px 24px rgba(28, 36, 29, .035);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+}
+.sidebar {
+  background: rgba(251, 252, 249, .48);
+  border-right: 1px solid var(--glass-hair);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, .55);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+}
+.brand-mark {
+  background: rgba(233, 242, 239, .62);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.sidebar-foot { border-top-color: var(--glass-hair); }
+.nav a.is-active {
+  background: rgba(233, 242, 239, .78);
+  border-left-color: var(--accent);
+  box-shadow: inset 0 0 0 1px rgba(46, 107, 96, .07);
+}
+.nav a:hover { background: rgba(240, 243, 238, .72); }
+
+/* ---------- KPI：主玻璃面 ---------- */
+.kpi {
+  background: linear-gradient(155deg, rgba(255, 255, 255, .34) 0%, rgba(255, 255, 255, 0) 52%), var(--glass);
+  border: 1px solid var(--glass-edge);
+  border-radius: 10px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .95),
+    inset 0 -1px 0 rgba(46, 107, 96, .04),
+    var(--glass-shadow);
+  -webkit-backdrop-filter: blur(16px) saturate(145%);
+  backdrop-filter: blur(16px) saturate(145%);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.kpi:hover {
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .85), 0 14px 34px rgba(28, 36, 29, .075);
+}
+.kpi__foot { border-top-color: rgba(214, 222, 211, .62); }
+
+/* ---------- 内容卡：接近不透明，只加一层柔和浮起感 ---------- */
+.card {
+  background: rgba(255, 255, 255, .95);
+  border-color: rgba(224, 230, 221, .9);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(28, 36, 29, .025), 0 10px 28px rgba(28, 36, 29, .028);
+}
+.card-head { border-bottom-color: rgba(230, 233, 226, .85); }
+.card-foot { background: rgba(250, 251, 248, .78); border-top-color: rgba(230, 233, 226, .85); }
+.filter-bar { background: rgba(250, 251, 248, .72); border-bottom-color: rgba(230, 233, 226, .85); }
+.inline-note { background: rgba(250, 251, 248, .7); }
+.status-flow .step { background: rgba(255, 255, 255, .8); }
+
+/* ---------- 浮层：抽屉与遮罩 ---------- */
+.drawer-backdrop {
+  background: rgba(28, 36, 29, .26);
+  -webkit-backdrop-filter: blur(5px) saturate(115%);
+  backdrop-filter: blur(5px) saturate(115%);
+}
+.drawer {
+  background: var(--glass-strong);
+  border-left: 1px solid rgba(255, 255, 255, .85);
+  box-shadow: -18px 0 50px rgba(28, 36, 29, .13), inset 1px 0 0 rgba(255, 255, 255, .6);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+}
+.drawer-head {
+  border-bottom-color: var(--glass-hair);
+  background: rgba(255, 255, 255, .42);
+}
+.drawer-foot {
+  border-top-color: var(--glass-hair);
+  background: rgba(250, 251, 248, .68);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* ---------- 提示条：深色玻璃 ---------- */
+.toast {
+  background: rgba(30, 40, 33, .82);
+  border: 1px solid rgba(255, 255, 255, .14);
+  box-shadow: 0 12px 34px rgba(20, 28, 22, .22), inset 0 1px 0 rgba(255, 255, 255, .08);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  backdrop-filter: blur(16px) saturate(130%);
+}
+
+/* ---------- 细节 ---------- */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 135, 120, .28);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(90, 110, 95, .45); background-clip: content-box; }
+
+.page-head h1 { letter-spacing: -.015em; }
+.seg { background: rgba(255, 255, 255, .72); }
+
+@media (max-width: 760px) {
+  .ambient__blob { opacity: .55; }
+  .kpi { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+}
+
+/* 浏览器不支持毛玻璃时退回实色，避免出现半透明却没模糊的廉价感 */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .topbar, .sidebar, .kpi, .card, .drawer { background: #fff; }
+  .toast { background: #26302a; }
+  .drawer-backdrop { background: rgba(28, 36, 29, .34); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  .kpi:hover { transform: none; }
+}

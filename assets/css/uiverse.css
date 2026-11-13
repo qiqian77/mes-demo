@@ -1,0 +1,130 @@
+/*
+ * uiverse.css — 交互控件样式
+ * 结构取自 Uiverse.io 开源组件（https://uiverse.io/ ，MIT）：
+ * 按钮的遮罩滑入、开关的滑块位移、输入框的聚焦描边。
+ * 这里按本项目的克制配色做了收敛，去掉了原组件的渐变与阴影堆叠。
+ */
+
+.uv-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 15px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: .01em;
+  white-space: nowrap;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+.uv-btn > * { position: relative; z-index: 1; }
+.uv-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(255, 255, 255, .12);
+  transform: translateX(-101%);
+  transition: transform .3s cubic-bezier(.22, .61, .36, 1);
+}
+.uv-btn:hover::before { transform: translateX(0); }
+.uv-btn:active { transform: translateY(1px); }
+.uv-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.uv-btn[disabled] { opacity: .45; cursor: not-allowed; }
+.uv-btn[disabled]::before { display: none; }
+
+.uv-btn--ghost {
+  background: transparent;
+  color: var(--ink-2);
+  border-color: var(--line-strong);
+}
+.uv-btn--ghost::before { background: rgba(46, 107, 96, .07); }
+.uv-btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+.uv-btn--small { min-height: 28px; padding: 0 11px; font-size: 12px; }
+.uv-btn--danger { background: var(--danger); border-color: var(--danger); }
+.uv-btn--text {
+  background: transparent;
+  border-color: transparent;
+  color: var(--accent);
+  padding: 0 4px;
+  min-height: auto;
+}
+.uv-btn--text::before { display: none; }
+.uv-btn--text:hover { color: var(--ink); }
+
+/* Uiverse-style toggle */
+.uv-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.uv-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.uv-switch__track {
+  width: 34px;
+  height: 19px;
+  border-radius: 999px;
+  background: #d8ddd6;
+  border: 1px solid #cdd3cb;
+  transition: background-color .22s ease, border-color .22s ease;
+  flex: none;
+}
+.uv-switch__track::after {
+  content: "";
+  display: block;
+  width: 13px;
+  height: 13px;
+  margin: 2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(24, 34, 28, .18);
+  transition: transform .22s cubic-bezier(.22, .61, .36, 1);
+}
+.uv-switch input:checked + .uv-switch__track { background: var(--accent); border-color: var(--accent); }
+.uv-switch input:checked + .uv-switch__track::after { transform: translateX(15px); }
+.uv-switch input:focus-visible + .uv-switch__track { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Uiverse-style form field */
+.uv-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.uv-field > label { font-size: 12px; color: var(--ink-2); font-weight: 500; }
+.uv-field .hint { font-size: 11px; color: var(--muted); }
+.uv-input,
+.uv-select,
+.uv-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  min-height: 34px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  transition: border-color .18s ease, box-shadow .18s ease;
+  outline: none;
+}
+.uv-textarea { min-height: 76px; resize: vertical; line-height: 1.55; }
+.uv-input::placeholder, .uv-textarea::placeholder { color: #a2a9a1; }
+.uv-input:hover, .uv-select:hover, .uv-textarea:hover { border-color: #b9c2b8; }
+.uv-input:focus, .uv-select:focus, .uv-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(46, 107, 96, .11);
+}
+.uv-select { appearance: none; padding-right: 30px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4.2 6 8.2 10 4.2' fill='none' stroke='%237d857d' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }

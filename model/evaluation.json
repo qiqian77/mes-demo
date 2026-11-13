@@ -1,0 +1,102 @@
+{
+  "note": "在模拟数据上、按设备留出的测试集测得；不代表真实设备上的泛化能力。",
+  "split": "按设备 8:2 划分，测试设备未参与训练与标准化统计量计算",
+  "seed": 20261112,
+  "devices": 48,
+  "stagesPerDevice": 19,
+  "samples": 912,
+  "trainSamples": 722,
+  "testSamples": 190,
+  "testDevices": [
+    "TR-02",
+    "TR-08",
+    "TR-10",
+    "TR-11",
+    "TR-14",
+    "TR-17",
+    "TR-18",
+    "TR-21",
+    "TR-23",
+    "TR-41"
+  ],
+  "datasetSha256": "546418677951149da32c7c4c01754a45d64cae131fa1fdda58f37cdf5ef69c6a",
+  "target": "remainingRatio = 1 - stage（剩余寿命占额定寿命的比例）",
+  "model": "标准化岭回归，lambda = 0.01",
+  "ratio": {
+    "MAE": 0.0591,
+    "RMSE": 0.0742,
+    "R2": 0.9266,
+    "n": 190
+  },
+  "days": {
+    "MAE": 7.51,
+    "RMSE": 9.14,
+    "n": 190
+  },
+  "baseline": {
+    "description": "常数预测（训练集标签均值）作为对照，用于确认模型确实学到了退化信号",
+    "MAE": 0.2368,
+    "RMSE": 0.2739,
+    "R2": 0
+  },
+  "comparison": {
+    "note": "全部方法共用同一份 912 条模拟样本、同一按设备 8:2 划分、同一 7 个特征、同一评估口径（MAE / RMSE / R² 针对剩余寿命比例；天数按各设备额定寿命换算）。只有这一层可以直接比较。",
+    "rows": [
+      {
+        "key": "constant",
+        "name": "常数基线",
+        "family": "对照",
+        "inUse": false,
+        "MAE": 0.2368,
+        "RMSE": 0.2739,
+        "R2": 0,
+        "MAE_days": 30.89,
+        "RMSE_days": 36.24
+      },
+      {
+        "key": "ridge",
+        "name": "标准化岭回归（页面在用）",
+        "family": "线性",
+        "inUse": true,
+        "MAE": 0.0591,
+        "RMSE": 0.0742,
+        "R2": 0.9266,
+        "MAE_days": 7.51,
+        "RMSE_days": 9.14
+      },
+      {
+        "key": "knn",
+        "name": "k 近邻回归（k=7）",
+        "family": "非参数",
+        "inUse": false,
+        "MAE": 0.0635,
+        "RMSE": 0.0813,
+        "R2": 0.9118,
+        "MAE_days": 8.05,
+        "RMSE_days": 10.15
+      },
+      {
+        "key": "gbdt",
+        "name": "梯度提升树（60 轮）",
+        "family": "树模型",
+        "inUse": false,
+        "MAE": 0.0622,
+        "RMSE": 0.0763,
+        "R2": 0.9224,
+        "MAE_days": 7.93,
+        "RMSE_days": 9.63
+      },
+      {
+        "key": "mlp",
+        "name": "多层感知机（7-12-1）",
+        "family": "神经网络",
+        "inUse": false,
+        "MAE": 0.0614,
+        "RMSE": 0.0752,
+        "R2": 0.9246,
+        "MAE_days": 7.84,
+        "RMSE_days": 9.43
+      }
+    ]
+  }
+}

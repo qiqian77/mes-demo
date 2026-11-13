@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>车间设备运维台 · MES 演示</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232e6b60'/%3E%3Cpath d='M8 23v-6M14 23V11M20 23v-4M26 23V7' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/uiverse.css">
+<link rel="stylesheet" href="assets/css/app.css">
+<link rel="stylesheet" href="assets/css/glass.css">
+</head>
+<body>
+
+<svg class="svg-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-grid" viewBox="0 0 20 20"><rect x="2.5" y="2.5" width="6" height="6" rx="1"/><rect x="11.5" y="2.5" width="6" height="6" rx="1"/><rect x="2.5" y="11.5" width="6" height="6" rx="1"/><rect x="11.5" y="11.5" width="6" height="6" rx="1"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 20 20"><path d="M1.5 10h3l2-5 3 10 2.5-7 2 4h4.5"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5"/><path d="M4.5 10h3l1.5-3 2.5 6 1.5-3h2.5"/></symbol>
+  <symbol id="i-list" viewBox="0 0 20 20"><path d="M6.5 5h11M6.5 10h11M6.5 15h11"/><path d="M2.8 5h.1M2.8 10h.1M2.8 15h.1" stroke-linecap="round" stroke-width="2"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 20 20"><rect x="3.5" y="3.5" width="13" height="14" rx="1.5"/><path d="M7 2.5h6v3H7zM7 9h6M7 12.5h6"/></symbol>
+</svg>
+
+<div class="ambient" aria-hidden="true">
+  <span class="ambient__blob ambient__blob--a"></span>
+  <span class="ambient__blob ambient__blob--b"></span>
+  <span class="ambient__blob ambient__blob--c"></span>
+</div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div>
+        <div class="brand-name">车间设备运维台</div>
+        <div class="brand-sub">MES · 设备管理演示</div>
+      </div>
+    </div>
+
+    <div class="nav-label">工作台</div>
+    <nav class="nav" id="nav">
+      <a href="#/dashboard" data-nav="dashboard"><svg><use href="#i-grid"/></svg><span>车间总览</span></a>
+      <a href="#/signal" data-nav="signal"><svg><use href="#i-wave"/></svg><span>数据与清洗</span></a>
+      <a href="#/predict" data-nav="predict"><svg><use href="#i-pulse"/></svg><span>风险预测</span></a>
+      <div class="nav-label nav-label--sub">台账</div>
+      <a href="#/assets" data-nav="assets"><svg><use href="#i-list"/></svg><span>设备台账</span></a>
+      <a href="#/orders" data-nav="orders"><svg><use href="#i-clip"/></svg><span>维保工单</span></a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="source-note">
+        <span class="live-dot"></span>
+        <div>
+          <strong>本地模拟数据源</strong>
+          <small>不接 PLC · 数据保存在本机浏览器</small>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><span>智能车间</span><i>/</i><strong id="crumb-current">车间总览</strong></div>
+      <div class="topbar-right">
+        <span class="topbar-time" id="clock">--:--:--</span>
+        <span class="tag tag--quiet">演示环境</span>
+      </div>
+    </header>
+    <main class="view" id="view"></main>
+  </div>
+</div>
+
+<div id="drawer-root"></div>
+<div id="toast-root" class="toast-root" aria-live="polite"></div>
+
+<script src="vendor/echarts.min.js"></script>
+<script src="js/universe.js"></script>
+<script src="js/simulate.js"></script>
+<script src="js/store.js"></script>
+<script src="model/risk-model.js"></script>
+<script src="js/model.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+/* 本文件由 tools/build-model.mjs 自动生成，请勿手工编辑。
+   file:// 下 fetch 被浏览器跳过，页面直接使用这份内联副本。 */
+window.MES_RISK_MODEL_FALLBACK = {
+  "name": "rul-ridge-v1",
+  "version": "1.0.0",
+  "kind": "7 特征标准化岭回归 · 估计剩余寿命比例",
+  "builtAt": "2026-11-12T15:52:45.315Z",
+  "training": {
+    "script": "node tools/build-model.mjs",
+    "verify": "node tools/build-model.mjs --verify",
+    "seed": 20261112,
+    "samples": 912,
+    "trainSamples": 722,
+    "testSamples": 190,
+    "split": "按设备 8:2 划分，测试设备未参与训练与标准化统计量计算",
+    "datasetSha256": "546418677951149da32c7c4c01754a45d64cae131fa1fdda58f37cdf5ef69c6a",
+    "lambda": 0.01
+  },
+  "features": [
+    {
+      "key": "tempRise",
+      "label": "相对基线温升",
+      "unit": "℃",
+      "weight": -0.30672402,
+      "mean": 11.33245161,
+      "std": 4.16595037
+    },
+    {
+      "key": "tempStd",
+      "label": "温度波动",
+      "unit": "℃",
+      "weight": -0.00830953,
+      "mean": 1.23744304,
+      "std": 0.37609435
+    },
+    {
+      "key": "tempTrend",
+      "label": "温升斜率",
+      "unit": "℃/点",
+      "weight": -0.02298917,
+      "mean": 0.01378466,
+      "std": 0.01306382
+    },
+    {
+      "key": "currentRise",
+      "label": "相对基线电流",
+      "unit": "A",
+      "weight": 0.12357588,
+      "mean": 2.13353692,
+      "std": 0.6407323
+    },
+    {
+      "key": "currentStd",
+      "label": "电流波动",
+      "unit": "A",
+      "weight": 0.01328353,
+      "mean": 0.46373169,
+      "std": 0.10223525
+    },
+    {
+      "key": "spikeRate",
+      "label": "毛刺占比",
+      "unit": "比例",
+      "weight": -0.00963784,
+      "mean": 0.03332756,
+      "std": 0.01728079
+    },
+    {
+      "key": "ripple",
+      "label": "电流纹波",
+      "unit": "A",
+      "weight": -0.05809498,
+      "mean": 0.14442234,
+      "std": 0.04646779
+    }
+  ],
+  "bias": 0.5,
+  "thresholds": {
+    "medium": 42,
+    "high": 70
+  },
+  "evaluation": {
+    "note": "在模拟数据上、按设备留出的测试集测得；不代表真实设备上的泛化能力。",
+    "split": "按设备 8:2 划分，测试设备未参与训练与标准化统计量计算",
+    "seed": 20261112,
+    "devices": 48,
+    "stagesPerDevice": 19,
+    "samples": 912,
+    "trainSamples": 722,
+    "testSamples": 190,
+    "testDevices": [
+      "TR-02",
+      "TR-08",
+      "TR-10",
+      "TR-11",
+      "TR-14",
+      "TR-17",
+      "TR-18",
+      "TR-21",
+      "TR-23",
+      "TR-41"
+    ],
+    "datasetSha256": "546418677951149da32c7c4c01754a45d64cae131fa1fdda58f37cdf5ef69c6a",
+    "target": "remainingRatio = 1 - stage（剩余寿命占额定寿命的比例）",
+    "model": "标准化岭回归，lambda = 0.01",
+    "ratio": {
+      "MAE": 0.0591,
+      "RMSE": 0.0742,
+      "R2": 0.9266,
+      "n": 190
+    },
+    "days": {
+      "MAE": 7.51,
+      "RMSE": 9.14,
+      "n": 190
+    },
+    "baseline": {
+      "description": "常数预测（训练集标签均值）作为对照，用于确认模型确实学到了退化信号",
+      "MAE": 0.2368,
+      "RMSE": 0.2739,
+      "R2": 0
+    },
+    "comparison": {
+      "note": "全部方法共用同一份 912 条模拟样本、同一按设备 8:2 划分、同一 7 个特征、同一评估口径（MAE / RMSE / R² 针对剩余寿命比例；天数按各设备额定寿命换算）。只有这一层可以直接比较。",
+      "rows": [
+        {
+          "key": "constant",
+          "name": "常数基线",
+          "family": "对照",
+          "inUse": false,
+          "MAE": 0.2368,
+          "RMSE": 0.2739,
+          "R2": 0,
+          "MAE_days": 30.89,
+          "RMSE_days": 36.24
+        },
+        {
+          "key": "ridge",
+          "name": "标准化岭回归（页面在用）",
+          "family": "线性",
+          "inUse": true,
+          "MAE": 0.0591,
+          "RMSE": 0.0742,
+          "R2": 0.9266,
+          "MAE_days": 7.51,
+          "RMSE_days": 9.14
+        },
+        {
+          "key": "knn",
+          "name": "k 近邻回归（k=7）",
+          "family": "非参数",
+          "inUse": false,
+          "MAE": 0.0635,
+          "RMSE": 0.0813,
+          "R2": 0.9118,
+          "MAE_days": 8.05,
+          "RMSE_days": 10.15
+        },
+        {
+          "key": "gbdt",
+          "name": "梯度提升树（60 轮）",
+          "family": "树模型",
+          "inUse": false,
+          "MAE": 0.0622,
+          "RMSE": 0.0763,
+          "R2": 0.9224,
+          "MAE_days": 7.93,
+          "RMSE_days": 9.63
+        },
+        {
+          "key": "mlp",
+          "name": "多层感知机（7-12-1）",
+          "family": "神经网络",
+          "inUse": false,
+          "MAE": 0.0614,
+          "RMSE": 0.0752,
+          "R2": 0.9246,
+          "MAE_days": 7.84,
+          "RMSE_days": 9.43
+        }
+      ]
+    }
+  },
+  "comparison": {
+    "note": "全部方法共用同一份 912 条模拟样本、同一按设备 8:2 划分、同一 7 个特征、同一评估口径（MAE / RMSE / R² 针对剩余寿命比例；天数按各设备额定寿命换算）。只有这一层可以直接比较。",
+    "rows": [
+      {
+        "key": "constant",
+        "name": "常数基线",
+        "family": "对照",
+        "inUse": false,
+        "MAE": 0.2368,
+        "RMSE": 0.2739,
+        "R2": 0,
+        "MAE_days": 30.89,
+        "RMSE_days": 36.24
+      },
+      {
+        "key": "ridge",
+        "name": "标准化岭回归（页面在用）",
+        "family": "线性",
+        "inUse": true,
+        "MAE": 0.0591,
+        "RMSE": 0.0742,
+        "R2": 0.9266,
+        "MAE_days": 7.51,
+        "RMSE_days": 9.14
+      },
+      {
+        "key": "knn",
+        "name": "k 近邻回归（k=7）",
+        "family": "非参数",
+        "inUse": false,
+        "MAE": 0.0635,
+        "RMSE": 0.0813,
+        "R2": 0.9118,
+        "MAE_days": 8.05,
+        "RMSE_days": 10.15
+      },
+      {
+        "key": "gbdt",
+        "name": "梯度提升树（60 轮）",
+        "family": "树模型",
+        "inUse": false,
+        "MAE": 0.0622,
+        "RMSE": 0.0763,
+        "R2": 0.9224,
+        "MAE_days": 7.93,
+        "RMSE_days": 9.63
+      },
+      {
+        "key": "mlp",
+        "name": "多层感知机（7-12-1）",
+        "family": "神经网络",
+        "inUse": false,
+        "MAE": 0.0614,
+        "RMSE": 0.0752,
+        "R2": 0.9246,
+        "MAE_days": 7.84,
+        "RMSE_days": 9.43
+      }
+    ],
+    "literature": {
+      "source": "刘宗宇, 廖雪超.《基于特征融合的机械核心部件剩余寿命预测》表 5「评价指标对比」",
+      "note": "论文在 916 个全生命周期采样文件上、以剩余寿命天数直接为标签测得，并按 8:2 划分训练/测试；本项目在 912 条本地模拟窗口上、以剩余寿命比例为标签，再按设备额定寿命换算成天数。数据集、标签定义、特征维度与划分口径都不同，两组数值不能比大小，只能看方法谱系与量级。",
+      "rows": [
+        {
+          "name": "M1 LGBM",
+          "family": "树模型",
+          "MAE": 14.647,
+          "RMSE": 19.775,
+          "R2": 0.89
+        },
+        {
+          "name": "M2 LSTM",
+          "family": "循环网络",
+          "MAE": 6.863,
+          "RMSE": 9.442,
+          "R2": 0.974
+        },
+        {
+          "name": "M3 CNN-BiLSTM",
+          "family": "卷积 + 循环",
+          "MAE": 13.679,
+          "RMSE": 18.812,
+          "R2": 0.899
+        },
+        {
+          "name": "M4 XGBT-DCNN",
+          "family": "树模型 + 卷积",
+          "MAE": 12.672,
+          "RMSE": 17.1,
+          "R2": 0.917
+        },
+        {
+          "name": "M5 Informer",
+          "family": "注意力模型",
+          "MAE": 10.108,
+          "RMSE": 13.472,
+          "R2": 0.95
+        },
+        {
+          "name": "M6 XGBT-Informer",
+          "family": "本文方法",
+          "MAE": 4.069,
+          "RMSE": 6.422,
+          "R2": 0.988
+        }
+      ]
+    }
+  },
+  "reference": {
+    "dataset": "设备类型编号与「按寿命比例构造样本」的做法参考科大讯飞 2019 工程机械核心部件数据集（S26a / S51d / S100 / Saa3 四类、916 个全生命周期采样文件、14 个字段）。本项目数据并非该数据集，而是本地模拟器生成。",
+    "papers": [
+      "刘宗宇, 廖雪超. 基于特征融合的机械核心部件剩余寿命预测. 计算机技术与发展, 2024 (网络首发).",
+      "刘晓勇. 基于深度学习的机械设备退化状态建模及剩余寿命预测. 哈尔滨工业大学硕士学位论文, 2018."
+    ],
+    "reportedMetrics": {
+      "model": "文献 XGBT-Informer（非本项目）",
+      "MAE": 4.069,
+      "RMSE": 6.422,
+      "R2": 0.988
+    },
+    "caveat": "本项目使用本地模拟数据训练标准化岭回归，未复现论文中的 Informer / LSTM / SDAE，未使用真实设备数据，也未做跨设备型号或跨数据集的泛化验证。同口径对比表可与本项目数据上的其它方法比较；论文表 5 数值仅作方法对照，两者不可比。"
+  }
+};
